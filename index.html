@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+	<head>
+    	<title>Caesar's Palace</title>
+        <link rel="shortcut icon" href="images/plate.png" />
+    	<script type="text/javascript" src="js/jQuery-1.7.2-min.js"></script>
+        <script type="text/javascript" src="js/center.js"></script>
+        <script type="text/javascript" src="js/mousescroll.js"></script>
+        <script type="text/javascript">
+			var stotal = 0;
+			$(document).ready(function() {
+				var current = 1;
+				var control = -1;
+				var qty = 0;
+				var cost = 0;
+				
+				
+				$('#header').height($(window).height()*0.2);
+				$('#header #logo').css('margin-top', ($('#header').height() - 100)/2);
+				$('#header').height($('#header').height() - ($('#header').height() - 100)/2);
+				$('#body').height($(window).height()*0.798);
+				$('#body').width($(document).width());
+				$('#menu').width($('#body').width()*0.15);
+				$('#bill').width($('#body').width()*0.25);
+				$('#tray').height($('#body').height());
+				$('#tray').width($('#body').width()*0.598);
+				$('#tray ul').width(4 * $('#tray').width());
+				$('#tray ul').height($('#tray').height());
+				$('#tray ul li').width($('#tray').width() - 20);
+				$('#tray ul li').height($('#tray').height() - 20);
+				$('#tray ul li ul').width($('#tray ul li').width() - 30);
+				$('#tray ul li ul').height($('#tray ul li').height() - 20);
+				$('.carriage ul').css('height', 'auto');
+				$('#tray ul li ul li').width(98);
+				$('#tray ul li ul li').height(98);
+				$('#tray ul li ul li').css('margin-top', Math.floor(Math.floor($('#tray ul li ul').width()/(Math.floor($('#tray ul li ul').width()/110))) - 100));
+				$('#tray ul li ul li').css('margin-left', Math.floor(Math.floor($('#tray ul li ul').width()/(Math.floor($('#tray ul li ul').width()/110))) - 100));
+				$('#tray ul li .scroller').css('margin-top', Math.floor(Math.floor($('#tray ul li ul').width()/(Math.floor($('#tray ul li ul').width()/110))) - 100));
+				$('#tray ul li .scroller').height(($('#tray ul li').height() - 20) - parseInt($('#tray ul li .scroller').css('margin-top')));
+				$('#tray ul li .scroller .thumb').height((($('.carriage ul').height()/$('.carriage').height()) * $('#tray ul li .scroller').height()));
+				$('#tray ul li .scroller .thumb').hide();
+				$('#bill #content').width($('#bill').width() - 20);
+				
+				$('#menu ul li').mouseover(function() {
+					//$(this).animate({paddingLeft:'20px'}, 'fast');
+				}).mouseleave(function() {
+					//$(this).animate({paddingLeft:'5px'}, 'fast');
+					
+				});
+				
+				$('#menu ul li').click(function() {
+					current = $(this).attr('number');
+					var distance = $('#tray').width();
+					$('#train').animate({marginLeft: -((current - 1) * distance)}, 300);
+					//$('#train').css('margin-left', -((current - 1) * distance));
+				});
+				
+				$('#tray').mouseover(function() {
+					$('#tray ul li .scroller .thumb').show();
+				}).mouseleave(function(){
+					$('#tray ul li .scroller .thumb').hide();
+				});
+				
+				for(var n = 0; n < $('.carriage').size(); n++)
+					$('.carriage').eq(n).scrolling();
+				
+				function billing(obj) {
+					for(var i = 0; i < $('#bill #content #receipt tbody').size(); i++){
+						if($('#bill #content #receipt tbody').eq(i).children('tr').children('td').eq(0).html() == $(obj).children('.item').attr('name')){
+							control = i;
+							break;
+						}
+					}
+					
+					if(control != -1) {
+						$('#bill #content #receipt tbody').eq(control).children('tr').children('.qty').html(parseInt($('#bill #content #receipt tbody').eq(control).children('tr').children('.qty').html()) + 1);
+					}else{
+						$('#bill #content #receipt').html($('#bill #content #receipt').html() + '<tr><td>' + $(obj).children('.item').attr('name') +'</td><td class="qty">' + 1 + '</td><td>' + $(obj).children('.item').attr('price') + '.00</td></tr>');	
+							}
+							
+					control = -1;
+					total = 0;
+					for(var o = 0; o < $('#bill #content #receipt tbody').size(); o++)
+						total += ($('#bill #content #receipt tbody').eq(o).children('tr').children('td').eq(1).html() * $('#bill #content #receipt tbody').eq(o).children('tr').children('td').eq(2).html());
+							
+					$('#bill #content #total').html('Total: ' + total + '.00');
+							
+					$('#bill #content #receipt tbody tr').unbind('click').click(function() {
+						if($(this).children('.qty').html() > 1){
+							qty = $(this).children('.qty').html() - 1;
+							$(this).children('.qty').html(qty);
+							total -= $(this).children('td').eq(2).html();
+						}else if($(this).children('.qty').html() == 1){
+							$(this).remove();
+							total -= $(this).children('td').eq(2).html();
+						}
+						$('#bill #content #total').html('Total: ' + total + '.00');
+					});
+							
+					/*if(control != -1){
+						$('#bill #content #receipt tbody').eq(control).children('tr').children('.qty').html(parseInt($('#bill #content #receipt tbody').eq(control).children('tr').children('.qty').html()) + 1);
+						$('#bill #content #receipt tbody').eq(control).children('tr').children('.cost').html(parseInt($('#bill #content #receipt tbody').eq(control).children('tr').children('.cost').html()) + parseInt($('#bill #content #receipt tbody').eq(control).children('tr').children('.cost').html())/($('#bill #content #receipt tbody').eq(control).children('tr').children('.qty').html() - 1) + '.00');
+					}else{
+						$('#bill #content #receipt').html($('#bill #content #receipt').html() + '<tr><td>' + $(obj).children('.item').attr('name') +'</td><td class="qty">' + 1 + '</td><td class="cost">' + parseInt($(obj).children('.item').attr('price')) + '.00</td></tr>');	
+					}
+							
+					control = -1;
+					
+					for(var o = 0; o < $('#bill #content #receipt tbody').size(); o++)
+						stotal = parseInt(stotal) + (parseInt($('#bill #content #receipt tbody').eq(o).children('tr').children('td').eq(2).html()));
+							
+					$('#bill #content #total').html('Total: ' + stotal + '.00');
+					
+					$('#bill #content #receipt tbody tr').unbind('click').click(function(){
+						if($(this).children('.qty').html() > 1){
+							qty = $(this).children('.qty').html() - 1;
+							cost = parseInt($(this).children('td').eq(2).html())/(qty + 1);
+							$(this).children('.qty').html(qty);
+							$(this).children('td').eq(2).html(($(this).children('td').eq(2).html() - cost) + '.00');
+							stotal -= cost;
+						}else if($(this).children('.qty').html() == 1){
+							$(this).remove();
+							stotal = stotal - parseInt($(this).children('td').eq(2).html());
+						}
+						$('#bill #content #total').html('Total: ' + stotal + '.00');
+					});*/
+				}
+				
+				function loadData(result, where) {
+					var items = '';
+						var ul = result.split('@');
+						for(var i = 0; i < ul.length - 1; i++) {
+							var lis = ul[i].split(':');
+							items += '<li><div class="item" name="' + lis[0] + '" price="' + lis[1] + '"><div class="name">' + lis[0] + '</div><div class="img"><img src="' + lis[2] + '" /></div><div class="price">' + lis[1] + '</div></div></li>';
+						}
+						$('#body #tray ul li ul').eq(where).html(items);
+						$('#body #tray ul li ul').eq(where).children('li').click(function() {
+							billing(this);
+						});
+				}
+				
+				$.ajax({
+					url : 'server.php',
+					data : 'what=1',
+					success : function(result) {
+						loadData(result, 0);
+					}
+				});
+				
+				$.ajax({
+					url : 'server.php',
+					data : 'what=2',
+					success : function(result) {
+						loadData(result, 1);
+					}
+				});
+				
+				$.ajax({
+					url : 'server.php',
+					data : 'what=3',
+					success : function(result) {
+						loadData(result, 2);
+					}
+				});
+				
+				$.ajax({
+					url : 'server.php',
+					data : 'what=4',
+					success : function(result) {
+						loadData(result, 3);
+					}
+				});
+			});
+		</script>
+        <style type="text/css">
+			body{margin:0; font-family:sans-serif; font-family:Andalus; background:url('images/table_cloth.png');}
+			#header{top:0; left:0; width:100%; padding-top:10px;}
+			#header #logo{width:300px; height:80px; margin:0 auto; background:rgba(0, 0, 0, 0.5); border-radius:6px; padding-left:10px; padding-right:10px;}
+			#header img{float:left; width:80px; height:80px;}
+			#header .name{color:#f2f2f2; font-size:36px; float:left; padding-top:20px; text-decoration:underline;}
+			#body{width:100%;}
+			#body #menu{left:0; width:20%; height:100%; float:left;}
+			#body #menu ul{padding:0; margin:5px; border-radius:6px; background:rgba(0, 0, 0, 0.5);}
+			#body #menu ul li{list-style:none; padding:5px 0px 5px 5px; cursor:pointer; font-size:20px; color:#f2f2f2; text-align:center;}
+			#body #menu ul li:hover{background:rgba(255, 255, 255, 0.5); color:#333;}
+			#body #tray{float:left; overflow:hidden; background:url('images/table_surface.png'); border-radius:6px;}
+			#body #tray ul{padding:0; margin:0; height:auto; width:auto;}
+			#body #tray ul li{list-style:none; float:left; margin:10px; background:#; overflow:hidden;}
+			#body #tray ul li ul{margin:0; float:left;}
+			#body #tray ul li ul li{list-style:none; height:98px; width:98px; margin:10px 0px 0px 10px; float:left; cursor:pointer; border-radius:10px; background:rgba(0, 0, 0, 0.5);}
+			#body #tray ul li ul li:hover{background:rgba(255, 255, 255, 0.5);}
+			#body #tray ul li ul li .item{width:96px; height:96px;}
+			#body #tray ul li ul li .item .name, #body #tray ul li ul li .item .price{text-align:center; color:#f2f2f2; font-size:14px; height:18px; font-family:;}
+			#body #tray ul li ul li:hover .name, #body #tray ul li ul li:hover .price{color:#333;}
+			#body #tray ul li ul li .item .img{width:94px; height:60px; margin:0 auto; margin-top:2px; margin-bottom:2px;}
+			#body #tray ul li ul li .item .img img{width:94px; height:60px; margin:0 auto; border-radius:5px;}
+			#body #tray ul li .scroller{width:10px; float:left; margin-left:10px; cursor:pointer;}
+			#body #tray ul li .scroller .thumb{background:#999; width:10px; height:50px;}
+			#body #bill{height:100%; float:left; color:#666;}
+			#body #bill #content{margin:5px; background:rgba(0, 0, 0, 0.3); padding:15px 5px 15px 5px; height:auto; border-radius:6px; background:url('images/leather_bg.png');}
+			#body #bill #wrapper_bill{background:#FFC; padding:5px; border-radius:3px;}
+			#body #bill #content #title{text-align:center;}
+			#body #bill #content #receipt{width:100%; border-collapse:collapse; margin-top:10px; margin-bottom:10px; border-top:1px solid #fc9; border-bottom:1px solid #fc9;}
+			#body #bill #content #receipt tr{cursor:pointer;}
+			#body #bill #content #receipt tr:hover{background:rgba(0, 0, 0, 0.3);}
+			#body #bill #content #receipt tr{border-bottom:1px dashed #FC9;}
+			#body #bill #content #receipt tr td:last-child{text-align:right;}
+			#body #bill #content #total{text-align:right;}
+		</style>
+    </head>
+    <body>
+    	<div id="header">
+        	<div id="logo">
+            	<div class="name">Caesar's</div>
+        		<img src="images/plate.png" />
+            	<div class="name">Palace</div>
+            </div>
+        </div>
+        <div id="body">
+            <div id="menu">
+                <ul>
+                	<li number="1">Starch</li>
+                    <li number="2">Proteins</li>
+                    <li number="3">Salads</li>
+                    <li number="4">Drinks</li>
+                </ul>
+            </div>
+            <div id="tray">
+            	<ul id="train">
+                	<li class="carriage">
+                    	<ul class="content">
+							
+                        </ul>
+                        <div class="scroller">
+                        	<div class="thumb"></div>
+						</div>
+                    </li>
+                    <li class="carriage">
+                    	<ul class="content">
+                            
+                        </ul>
+                        <div class="scroller">
+                        	<div class="thumb"></div>
+                        </div>
+                    </li>
+                    <li class="carriage">
+                    	<ul class="content">
+                        	
+                        </ul>
+                        <div class="scroller">
+                        	<div class="thumb"></div>
+                        </div>
+                    </li>
+                    <li class="carriage">
+                    	<ul class="content">
+                        	
+                        </ul>
+                        <div class="scroller">
+                        	<div class="thumb"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="bill">
+            	<div id="content">
+                	<div id="wrapper_bill">
+                        <div id="title">Your Bill</div>
+                        <table id="receipt"></table>
+                        <div id="total">Total: 0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
