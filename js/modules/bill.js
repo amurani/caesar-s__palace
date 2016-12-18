@@ -1,7 +1,6 @@
-define(['jquery', 'utils/events', 'utils/string_template', 'redux'], function($, events, strTemplate, redux) {
-
+define(['jquery', 'utils/events', 'handlebars', 'utils/string_template', 'redux'], function($, events, Handlebars, strTemplate, redux) {
   var $bill;
-  var billItemTemplate = '<tr data-id="{id}"><td>{name}</td><td class="qty">{quantity}</td><td>{price}.00</td></tr>';
+  var $billItemTemplate;
 
   var billTotal = 0;
 
@@ -67,7 +66,8 @@ define(['jquery', 'utils/events', 'utils/string_template', 'redux'], function($,
   }
 
   function renderBillItem(billItem) {
-    return strTemplate.render(billItemTemplate, billItem);
+    var template = Handlebars.compile( $billItemTemplate );
+    return template(billItem);
   }
 
   function renderTotal(billTotal) {
@@ -77,14 +77,14 @@ define(['jquery', 'utils/events', 'utils/string_template', 'redux'], function($,
   function renderBill() {
     var billTotal = 0;
 
-    $bill.find('#receipt').html('');
+    $bill.find('.bill__receipt').html('');
     store.getState().billItems.forEach(function(billItem) {
-      $bill.find('#receipt').append( renderBillItem(billItem) );
+      $bill.find('.bill__receipt').append( renderBillItem(billItem) );
 
       billTotal += parseInt( billItem.price ) * billItem.quantity;
     });
 
-    $bill.find('#total').html( renderTotal(billTotal) );
+    $bill.find('.bill__total').html( renderTotal(billTotal) );
   }
 
   function handleAddBillItem() {
@@ -103,12 +103,13 @@ define(['jquery', 'utils/events', 'utils/string_template', 'redux'], function($,
 
   function addEventListeners() {
       events.listen('tray', handleAddBillItem());
-      $bill.on('click', '#receipt tbody tr', handleRemoveBillItem())
+      $bill.on('click', '.bill__receipt__item', handleRemoveBillItem())
   }
 
   return {
-    init: function($billContainer) {
-      $bill = $billContainer;
+    init: function($billEl) {
+      $bill = $billEl;
+      $billItemTemplate = $bill.find('.template--bill__receipt__item').html();
 
       store = redux.createStore(billReducer);
       store.subscribe(renderBill);

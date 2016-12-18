@@ -6,41 +6,76 @@
 		<link rel="stylesheet" href="css/plate.css">
 	</head>
 	<body>
-		<div id="header">
-			<div id="logo">
-				<div class="name">Caesar's</div>
-				<img src="images/plate.png" />
-				<div class="name">Palace</div>
+
+
+		<header class="header">
+
+			<!-- Welcome to my hotel -->
+			<div class="header__logo">
+				<div class="header__logo__name">Caesar's</div>
+				<img class="header__logo__image" src="images/plate.png" />
+				<div class="header__logo__name">Palace</div>
 			</div>
-		</div>
-		<div id="body">
 
 			<!-- Types of food -->
-			<div id="menu">
-				<ul>
+			<section class="menu">
+				<span class="menu_title">Menu</span>
+				<ul class="menu_list">
 					<!-- Menu Container -->
 				</ul>
-			</div>
+				<script type="text/x-handlebars-template" class="template--menu_list__item">
+					<li class="menu_list__item" data-category="{{category}}">{{Category}}</li>
+				</script>
+			</section>
+		</header>
+
+		<main>
 
 			<!-- The actual food -->
-			<div id="tray">
-				<ul id="train">
+			<section id="tray" class="tray">
+				<ul id="train" class="tray__wrapper">
 					<!-- Food trays -->
 				</ul>
-			</div>
+
+				<script type="text/x-handlebars-template" class="template--tray__item">
+					<li class="tray__item" data-id="{{id}}" data-name="{{name}}" data-price="{{price}}">
+						<div class="item">
+							<div class="tray__item__name">{{name}}</div>
+							<div class="tray__item__image" style="background-image: url({{location}});"></div>
+							<div class="tray__item__price">{{price}}</div>
+						</div>
+					</li>
+				</script>
+
+				<script type="text/x-handlebars-template" class="template--tray__container">
+					<li class="tray__container" data-category="{{category}}">
+						<ul class="tray__list">
+
+						</ul>
+					</li>
+				</script>
+
+			</section>
 
 			<!-- You bill -->
-			<div id="bill">
-				<div id="content">
-					<div id="wrapper_bill">
-						<div id="title">Your Bill</div>
-						<table id="receipt"></table>
-						<div id="total">Total: 0.00</div>
+			<section id="bill" class="bill">
+				<div class="bill__container">
+					<div class="bill__wrapper">
+						<div class="bill__title">Your Bill</div>
+						<table class="bill__receipt"></table>
+						<div class="bill__total">Total: 0.00</div>
 					</div>
 				</div>
-			</div>
+				<script type="text/x-handlebars-template" class="template--bill__receipt__item">
+					<tr class="bill__receipt__item" data-id="{{id}}">
+						<td>{{name}}</td>
+						<td class="qty">{{quantity}}</td>
+						<td>{{price}}.00</td>
+					</tr>
+				</script>
+			</section>
 
-		</div>
+		</main>
 
     <script data-main="js/plate.js" src="js/require.js"></script>
 

@@ -1,7 +1,7 @@
-define(['jquery', 'utils/data', 'utils/events', 'utils/string_template', 'mousescroll'], function($, data, events, strTemplate) {
+define(['jquery', 'utils/data', 'utils/events', 'utils/string_template', 'handlebars'], function($, data, events, strTemplate, Handlebars) {
   var $tray;
-  var trayTemplate = '<li class="carriage" data-category="{category}"><ul class="content"></ul><div class="scroller"><div class="thumb"></div></div></li>';
-  var trayItemTemplate = '<li class="tray-item" data-id="{id}" data-name="{name}" data-price="{price}"><div class="item"><div class="name">{name}</div><div class="img"><img src="{location}" /></div><div class="price">{price}</div></div></li>';
+  var $trayContainerTemplate;
+  var $trayItemTemplate;
 
   function getTrayContainer(category) {
     var selector = strTemplate.render('[data-category="{category}"]', { category: category });
@@ -9,25 +9,25 @@ define(['jquery', 'utils/data', 'utils/events', 'utils/string_template', 'mouses
   }
 
   function renderTray(category) {
-      $tray.find('#train').append( strTemplate.render(trayTemplate, { category: category }) );
-      var $trayContainer = getTrayContainer(category);
-      $trayContainer.find('.carriage').scrolling();
-      return $trayContainer;
+    var template = Handlebars.compile( $trayContainerTemplate );
+    $tray.find('.tray__wrapper').append( template({ category: category }) );
+    var $trayContainer = getTrayContainer(category);
+    return $trayContainer;
   }
 
   function renderTrayItem(trayItem) {
-      return strTemplate.render(trayItemTemplate, trayItem);
+      var template = Handlebars.compile( $trayItemTemplate );
+      return template( trayItem );
   }
 
   function showTray(category) {
-    var $trayContainer = getTrayContainer(category);
-    var index = $trayContainer.index();
-    var distance = $tray.width();
-    $tray.find('#train').animate({ marginLeft : -(index * distance) }, 300);
+    $tray.find('.tray__container').hide();
+    getTrayContainer(category).show();
+
   }
 
   function loadTray(category) {
-    var $trayContainer = renderTray(category).find('.content');
+    var $trayContainer = renderTray(category);
     data.fetchData('server.php', { category : category }).then(
         function(trayItems) {
           trayItems.forEach(function(trayItem) {
@@ -61,12 +61,14 @@ define(['jquery', 'utils/data', 'utils/events', 'utils/string_template', 'mouses
 
   function addEventListeners() {
     events.listen('category', handleCategorySelection());
-    $tray.on('click', '.tray-item', handeleTrayItemSelection());
+    $tray.on('click', '.tray__item', handeleTrayItemSelection());
   }
 
   return {
-    init: function($trayContainer) {
-      $tray = $trayContainer;
+    init: function($trayEl) {
+      $tray = $trayEl;
+      $trayContainerTemplate = $tray.find('.template--tray__container').html();
+      $trayItemTemplate = $tray.find('.template--tray__item').html();
 
       addEventListeners();
     }

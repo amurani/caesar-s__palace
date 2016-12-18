@@ -1,23 +1,21 @@
-define(['jquery', 'utils/data', 'utils/events', 'utils/string_template'], function($, data, events, strTemplate) {
+define(['jquery', 'utils/data', 'utils/events', 'utils/string_template', 'handlebars'], function($, data, events, strTemplate, Handlebars) {
   var $menu;
-  var menuItemTemplate = '<li data-category="{category}">{Category}</li>';
+  var $menuItemTemplate;
 
   function getTitlizedCategory(category) {
     return category[0].toUpperCase() + category.slice(1, category.length);
   }
 
   function renderCategory(category) {
-    var menuItem = strTemplate.render(menuItemTemplate, { category: category, Category: getTitlizedCategory(category) });
-
-    $menu.append( menuItem );
-
+    var template = Handlebars.compile( $menuItemTemplate );
+    return template({ category: category, Category: getTitlizedCategory(category) });
   }
 
   function loadCategories() {
     data.fetchData( 'server.php', { } ).then(
         function(categories) {
             categories.forEach(function(category) {
-              renderCategory(category.category);
+              $menu.find('.menu_list').append( renderCategory(category.category) );
             });
         }
     );
@@ -35,12 +33,13 @@ define(['jquery', 'utils/data', 'utils/events', 'utils/string_template'], functi
   }
 
   return {
-    init : function($menuContainer) {
-        $menu = $menuContainer;
-
-        loadCategories();
+    init : function($menuEl) {
+        $menu = $menuEl;
+        $menuItemTemplate = $menu.find('.template--menu_list__item').html();
 
         addEventListeners();
+
+        loadCategories();
     }
   }
 });
