@@ -31,7 +31,8 @@ define(['jquery', 'utils/data', 'utils/events', 'utils/string_template', 'handle
     data.fetchData('server.php', { category : category }).then(
         function(trayItems) {
           trayItems.forEach(function(trayItem) {
-            $trayContainer.append( renderTrayItem(trayItem) );
+            $.extend(trayItem, { category });
+            $trayContainer.find('.tray__list').append( renderTrayItem(trayItem) );
           });
 
           showTray(category);
