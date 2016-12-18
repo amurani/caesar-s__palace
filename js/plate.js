@@ -2,7 +2,8 @@ requirejs.config({
     paths: {
         jquery: 'libs/jquery.min',
         mousescroll: 'libs/mousescroll',
-        center: 'libs/center'
+        center: 'libs/center',
+        redux: 'libs/redux.min'
     }
 });
 
