@@ -16,7 +16,7 @@ ul {
 }
 
 .header__logo {
-  border-bottom: 1px solid #556b2f;
+  border-bottom: 1px solid #ddd;
   padding: 5px;
   text-align: center;
 }
@@ -27,40 +27,47 @@ ul {
 }
 
 .header__logo__image {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     margin: 0 5px;
 }
 
 .header__logo__name {
     color: #556b2f;
-    font-size: 28px;
+    font-size: 26px;
 }
 
 /* The menu */
 .menu {
   background-color: white;
-  border-bottom: 1px solid #999;
   box-shadow: 0px 2px 2px 0px rgba(50, 50, 50, 0.75);
-  padding: 5px 10px;
 }
 
-.menu_title {
-  font-weight: bold;
-}
-
+.menu_title,
 .menu_list {
   display: inline-block;
 }
 
+.menu_title {
+  border-right: 1px solid #eee;
+  color: #444;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
 .menu_list__item {
+  border-bottom: 4px solid white;
+  color: #999;
   cursor: pointer;
   display: inline-block;
-  padding: 5px 10px;
+  font-weight: bold;
+  padding: 6px 20px;
+
+  transition: border-bottom 1s;
 }
 
 .menu_list__item:hover {
-  color: #556b2f;
+  border-bottom-color: #556b2f;
 }
 
 .menu_list__item--active {
@@ -78,8 +85,8 @@ ul {
 
 .tray__item {
   background-color: white;
-  border: 1px solid #aaa;
   border-radius: 2px;
+  box-shadow: 0 0 10px black;
   display: inline-block;
   margin: 5px;
   width: 200px;
@@ -88,12 +95,13 @@ ul {
 .tray__item__name,
 .tray__item__price {
   color: #666;
-  font-weight: bold;
-  padding: 5px 10px;
+  padding: 7px 10px;
 }
 
 .tray__item__name {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9em;
+  font-weight: bold;
 }
 
 .tray__item__image {
@@ -104,9 +112,16 @@ ul {
 }
 
 .tray__item__price {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #eee;
+  font-size: 0.8em;
 }
 
+.tray__item__price:before {
+  content: "KES: ";
+  font-weight: bold;
+}
+
+/* The bill */
 .bill {
   color: #666;
   position: absolute;
@@ -116,20 +131,24 @@ ul {
 }
 
 .bill__container {
-  height: auto;
-  border-radius: 6px;
   background: url(../images/leather_bg.png);
-  margin: 5px;
-  padding: 15px 5px;
+  border-radius: 3px;
+  box-shadow: 0 0 10px black;
+  padding: 20px 15px;
+  margin: 10px;
+
 }
 
 .bill__wrapper {
   background: #FFC;
   border-radius: 3px;
-  padding: 5px;
+  box-shadow: 0 0 10px black;
+  padding: 10px 20px;
 }
 
 .bill__title {
+  font-size: 16px;
+  font-weight: bold;
   text-align: center;
 }
 
@@ -148,10 +167,18 @@ ul {
 }
 
 .bill__receipt tr:hover {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .bill__receipt tr td:last-child,
 .bill__total {
   text-align: right;
+}
+
+.bill__total {
+  font-weight: bold;
+}
+
+.bill__receipt tr td {
+  padding: 5px 0;
 }
