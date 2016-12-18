@@ -1,0 +1,33 @@
+body{margin:0; font-family:sans-serif; font-family:Andalus; background:url('../images/table_cloth.png');}
+#header{top:0; left:0; width:100%; padding-top:10px;}
+#header #logo{width:300px; height:80px; margin:0 auto; background:rgba(0, 0, 0, 0.5); border-radius:6px; padding-left:10px; padding-right:10px;}
+#header img{float:left; width:80px; height:80px;}
+#header .name{color:#f2f2f2; font-size:36px; float:left; padding-top:20px; text-decoration:underline;}
+#body{width:100%;}
+#body #menu{left:0; width:20%; height:100%; float:left;}
+#body #menu ul{padding:0; margin:5px; border-radius:6px; background:rgba(0, 0, 0, 0.5);}
+#body #menu ul li{list-style:none; padding:5px 0px 5px 5px; cursor:pointer; font-size:20px; color:#f2f2f2; text-align:center;}
+#body #menu ul li:hover{background:rgba(255, 255, 255, 0.5); color:#333;}
+#body #tray{float:left; overflow:hidden; background:url('../images/table_surface.png'); border-radius:6px;}
+#body #tray ul{padding:0; margin:0; height:auto; width:auto;}
+#body #tray ul li{list-style:none; float:left; margin:10px; background:#; overflow:hidden;}
+#body #tray ul li ul{margin:0; float:left;}
+#body #tray ul li ul li{list-style:none; height:98px; width:98px; margin:10px 0px 0px 10px; float:left; cursor:pointer; border-radius:10px; background:rgba(0, 0, 0, 0.5);}
+#body #tray ul li ul li:hover{background:rgba(255, 255, 255, 0.5);}
+#body #tray ul li ul li .item{width:96px; height:96px;}
+#body #tray ul li ul li .item .name, #body #tray ul li ul li .item .price{text-align:center; color:#f2f2f2; font-size:14px; height:18px; font-family:;}
+#body #tray ul li ul li:hover .name, #body #tray ul li ul li:hover .price{color:#333;}
+#body #tray ul li ul li .item .img{width:94px; height:60px; margin:0 auto; margin-top:2px; margin-bottom:2px;}
+#body #tray ul li ul li .item .img img{width:94px; height:60px; margin:0 auto; border-radius:5px;}
+#body #tray ul li .scroller{width:10px; float:left; margin-left:10px; cursor:pointer;}
+#body #tray ul li .scroller .thumb{background:#999; width:10px; height:50px;}
+#body #bill{height:100%; float:left; color:#666;}
+#body #bill #content{margin:5px; background:rgba(0, 0, 0, 0.3); padding:15px 5px 15px 5px; height:auto; border-radius:6px; background:url('../images/leather_bg.png');}
+#body #bill #wrapper_bill{background:#FFC; padding:5px; border-radius:3px;}
+#body #bill #content #title{text-align:center;}
+#body #bill #content #receipt{width:100%; border-collapse:collapse; margin-top:10px; margin-bottom:10px; border-top:1px solid #fc9; border-bottom:1px solid #fc9;}
+#body #bill #content #receipt tr{cursor:pointer;}
+#body #bill #content #receipt tr:hover{background:rgba(0, 0, 0, 0.3);}
+#body #bill #content #receipt tr{border-bottom:1px dashed #FC9;}
+#body #bill #content #receipt tr td:last-child{text-align:right;}
+#body #bill #content #total{text-align:right;}
